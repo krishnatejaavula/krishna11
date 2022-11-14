@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3e523e14-613e-4fa5-abdf-aebfeafedc02" >
+		<http:listener-connection host="0.0.0.0" port="8087" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration5" doc:name="HTTP Request configuration" doc:id="771e9f52-49fe-496d-bf3b-6386955e3776" >
+		<http:request-connection host="localhost" port="8085" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration6" doc:name="HTTP Request configuration" doc:id="7a617263-c788-4fd2-aff7-44d03d3d9580" >
+		<http:request-connection host="localhost" port="8086" />
+	</http:request-config>
+	<flow name="experience-1Flow" doc:id="da21dad4-94b6-45cf-9b99-764b2bfe866b" >
+		<http:listener doc:name="Listener" doc:id="8ec4bc17-74e0-42c1-af36-290e82641ebc" config-ref="HTTP_Listener_config" path="/experience1"/>
+		<logger level="INFO" doc:name="Logger" doc:id="5fd5ee59-0659-42a6-9c17-156173a90c4d" />
+		<http:request method="GET" doc:name="Request" doc:id="8d1b4c7a-b56e-4d4b-8457-e61eff98ba5b" config-ref="HTTP_Request_configuration5" path="/process1"/>
+		<set-variable value="payload" doc:name="Set payload5" doc:id="bbf22e86-c769-4f79-98a7-58bd141e180c" variableName="payload5"/>
+		<http:request method="GET" doc:name="Request" doc:id="d0ca1f52-d5ef-429e-9be9-b172089ee65d" config-ref="HTTP_Request_configuration6" path="/process2"/>
+		<set-variable value="payload" doc:name="Set payload6" doc:id="24d1f182-1ecf-40c7-8d63-626971a18720" variableName="payload6"/>
+		<ee:transform doc:name="Transform Message" doc:id="78017d14-d847-4758-a813-e35029a86a05" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"name": "naveen express",
+	"role": "kabaddi player",
+	"team": "dabang delhi kc",
+	"jersey no": 10
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
